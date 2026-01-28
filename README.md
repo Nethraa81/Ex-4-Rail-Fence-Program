@@ -19,7 +19,77 @@ STEP-4: Arrange the characters of the keyword in sorted order and the correspond
 STEP-5: Read the characters row wise or column wise in the former order to get the cipher text.
 
 # PROGRAM
+```
+#include <stdio.h>
+#include <string.h>
 
+int main() {
+    char text[100], enc[100], dec[100];
+    int rails, len, i, j, k, row, dir;
+
+    printf("Enter plaintext: ");
+    scanf("%s", text);
+
+    printf("Enter number of rails: ");
+    scanf("%d", &rails);
+
+    len = strlen(text);
+
+    // Encryption
+    k = 0;
+    for(row = 0; row < rails; row++) {
+        dir = 1;
+        int r = 0;
+        for(i = 0; i < len; i++) {
+            if(r == row) enc[k++] = text[i];
+            if(r == 0) dir = 1;
+            else if(r == rails-1) dir = -1;
+            r += dir;
+        }
+    }
+    enc[k] = '\0';
+    printf("Encrypted: %s\n", enc);
+
+    // Decryption
+    char temp[100];
+    int mark[100] = {0};
+
+    // Mark positions
+    for(row = 0; row < rails; row++) {
+        dir = 1; int r = 0;
+        for(i = 0; i < len; i++) {
+            if(r == row) mark[i] = 1;
+            if(r == 0) dir = 1;
+            else if(r == rails-1) dir = -1;
+            r += dir;
+        }
+    }
+
+    // Fill characters in order
+    k = 0;
+    for(i = 0; i < rails; i++) {
+        for(j = 0; j < len; j++) {
+            if(mark[j] == 1) {
+                temp[j] = enc[k++];
+                mark[j] = 0;
+            }
+        }
+    }
+
+    // Read zigzag
+    row = 0; dir = 1; k = 0;
+    for(i = 0; i < len; i++) {
+        dec[k++] = temp[i];
+    }
+    dec[k] = '\0';
+
+    printf("Decrypted: %s\n", dec);
+
+    return 0;
+}
+```
 # OUTPUT
+<img width="578" height="325" alt="image" src="https://github.com/user-attachments/assets/9e8f0cd2-88b3-474a-a3ae-7fd3b1f1192f" />
 
 # RESULT
+Thus the program to implement the rail fence transposition technique has been executed successfully.
